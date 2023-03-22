@@ -9,7 +9,7 @@ int main() {
     char *server = "localhost";
     char *user = "username";
     char *password = "password";
-    char *database = "database_name";
+    char *database = "Real_Estate_Advisor";
 
     conn = mysql_init(NULL);
 
@@ -18,7 +18,7 @@ int main() {
         exit(1);
     }
 
-    if (mysql_query(conn, "SELECT * FROM table_name")) {
+    if (mysql_query(conn, "SELECT * FROM property")) {
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }

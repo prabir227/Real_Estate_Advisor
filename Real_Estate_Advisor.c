@@ -36,7 +36,44 @@ int insert(MYSQL *conn)
     }
     return 0;
 }
+int loan(MYSQL *conn){
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+    if (mysql_query(conn,"select * from bank_record")){
+        fprintf(stderr,"%s\n",mysql_error(conn));
+        exit(1);
+    }
+    res= mysql_use_result(conn);
+    while ((row = mysql_fetch_row(res)) != NULL) {
+    printf("%s %s %s %s\n", row[0], row[1],row[2],row[3]);
+    }
+    mysql_free_result(res);
 
+    return 0;
+}
+int delete(MYSQL *conn, int id){
+    char query[100];
+    sprintf(query, "DELETE FROM property where P_id = %d",id);
+    if (mysql_query(conn,query)){
+        fprintf(stderr, "%s\n",mysql_error(conn));
+    }
+    return 0;
+}
+int search(MYSQL *conn, int area, int price){
+    MYSQL_RES *res;
+    MYSQL_ROW row;
+    char query[100];
+    sprintf(query, "SELECT * FROM property WHERE Desired_Area<= %d AND price <= %d",area, price);
+    if(mysql_query(conn,query)){
+        fprintf(stderr,"%s\n",mysql_error(conn));
+    }
+    res = mysql_use_result(conn);
+    while((row = mysql_fetch_row(res)) != NULL){
+        printf("%s %s %s %s %s %s\n",row[0],row[1],row[2],row[3],row[4],row[5]);
+    }
+    mysql_free_result(res);
+    return 0;
+}
 int main()
 {
     MYSQL *conn;
@@ -60,15 +97,15 @@ int main()
     //     fprintf(stderr, "%s\n", mysql_error(conn));
     //     exit(1);
     // }
-    insert(conn);
 
-    res = mysql_use_result(conn);
-
+    //res = mysql_use_result(conn);
+    //loan(conn);
+    //delete(conn, 1);
     // while ((row = mysql_fetch_row(res)) != NULL) {
     //     printf("%s %s %s %s %s %s\n", row[0], row[1], row[2], row[3], row[4], row[5]);
     // }
-
-    mysql_free_result(res);
+    search(conn,24000,3000000);
+    // mysql_free_result(res);
     mysql_close(conn);
 
     return 0;

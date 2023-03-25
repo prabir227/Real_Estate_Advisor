@@ -109,7 +109,51 @@ int main()
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
-
+    int var, id, price, area,loan_var;
+    printf("Press 1 if you want to buy property:\n");
+    printf("Press 2 if you want to sell property:\n");
+    printf("Enter your response: ");
+    scanf("%d",&var);
+    if (var == 1){
+        printf("Enter the required details of your dream property:\n");
+        printf("Enter the desired area of your property in sqft: ");
+        scanf("%d",&area);
+        printf("Enter the estimated price of your peoperty: ");
+        scanf("%d",price);
+        search(conn, area, price);
+        printf("Enter the id of the property you want to buy: ");
+        scanf("%d",&id);
+        if(!(delete(conn, id))){
+            printf("The selected property has been assigned to you!!!");
+            printf("Press 1 if you want to take loan.\n");
+            printf("Press 0 if you do not want to take loan\n");
+            printf("Enter your response: ");
+            scanf("%d",&loan_var);
+            if (loan_var == 1){
+            loan(conn);
+            }
+            else if (loan_var == 0){
+                printf("We are happy to hear that you are capable of buying your property on your own.\n");
+                printf("You can contact us whenever you want any assistance related to property.!!!");
+                loan(conn);
+            }
+            else{
+                printf("Enter valid input!!!");
+            }
+        }
+    }
+    else if (var == 2){
+        printf("Enter the required details of your property: ");
+        if(insert(conn)){
+            fprintf(stderr, "%s\n",mysql_error(conn));
+        }
+        else{
+            printf("Your property is successfully added to the database.")
+        }
+    }
+    else{
+        printf("Enter valid input!!!");
+    }
     // if (mysql_query(conn, "SELECT * FROM property")) {
     //     fprintf(stderr, "%s\n", mysql_error(conn));
     //     exit(1);

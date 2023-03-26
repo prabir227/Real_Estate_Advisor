@@ -137,7 +137,7 @@ int main()
         {
             printf("Do you want to buy any of the listed properties?\n");
             printf("Press 1 if yes.\n");
-            printf("Press 2 if no.\n");
+            printf("Press 0 if no.\n");
             printf("Enter your response: ");
             scanf("%d", &buy_choice);
             if (buy_choice == 1)

@@ -77,6 +77,7 @@ int search(MYSQL *conn, int area, int price)
 {
     MYSQL_RES *res;
     MYSQL_ROW row;
+    my_ulonglong num_rows;
     char query[100];
     sprintf(query, "SELECT * FROM property WHERE Desired_Area<= %d AND price <= %d", area, price);
     if (mysql_query(conn, query))
@@ -84,15 +85,20 @@ int search(MYSQL *conn, int area, int price)
         fprintf(stderr, "%s\n", mysql_error(conn));
     }
     res = mysql_store_result(conn);
-    if (res == NULL)
+    num_rows = mysql_num_rows(res);
+    if (num_rows > 0)
+    {
+        while (row = mysql_fetch_row(res))
+        {
+            printf("%s %s %s %s %s %s\n", row[0], row[1], row[2], row[3], row[4], row[5]);
+        }
+    }
+    else
     {
         printf("Sorry !!!");
         printf("We do not have any property according to your choice.\n");
         printf("Better luck next time!!!\n");
-    }
-    while (row = mysql_fetch_row(res))
-    {
-        printf("%s %s %s %s %s %s\n", row[0], row[1], row[2], row[3], row[4], row[5]);
+        
     }
     return 0;
     mysql_free_result(res);
@@ -125,7 +131,7 @@ int main()
         printf("Enter the required details of your dream property:\n");
         printf("Enter the desired area of your property in sqft: ");
         scanf("%d", &area);
-        printf("Enter the estimated price of your peoperty: ");
+        printf("Enter the estimated price of your property: ");
         scanf("%d", &price);
         search(conn, area, price);
         printf("Enter the id of the property you want to buy: ");

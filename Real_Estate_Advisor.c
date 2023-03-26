@@ -39,17 +39,19 @@ int insert(MYSQL *conn)
     return 0;
 }
 // This function is for fetching the details of banks which provide loan.
-// It takes the initializes connection as input.
+// It takes the initialized connection as input.
 int loan(MYSQL *conn)
 {
     MYSQL_RES *res;
     MYSQL_ROW row;
-    if (mysql_query(conn, "select * from bank_record"))
+    if (mysql_query(conn, "select * from bank_record"))//Checking if query is running or not.
     {
+        //Printing the error occured in the query.
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
-    res = mysql_use_result(conn);
+    res = mysql_use_result(conn);//Storing the result of the query.
+    //Printing the table of the query.
     while ((row = mysql_fetch_row(res)) != NULL)
     {
         printf("%s %s %s %s\n", row[0], row[1], row[2], row[3]);
@@ -79,13 +81,14 @@ int search(MYSQL *conn, int area, int price)
     MYSQL_ROW row;
     my_ulonglong num_rows;
     char query[100];
+    //saving the query to the variable.
     sprintf(query, "SELECT * FROM property WHERE Desired_Area<= %d AND price <= %d", area, price);
     if (mysql_query(conn, query))
     {
         fprintf(stderr, "%s\n", mysql_error(conn));
     }
     res = mysql_store_result(conn);
-    num_rows = mysql_num_rows(res);
+    num_rows = mysql_num_rows(res);//calculating the number of rows according to the query.
     if (num_rows > 0)
     {
         while (row = mysql_fetch_row(res))
@@ -121,7 +124,8 @@ int main()
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
-    int var, id, price, area, loan_var, buy_choice;
+    int var, id, price, area, loan_var, buy_choice;//Initializing all the required variables.
+    //Asking user if he wants to buy property.
     printf("Press 1 if you want to buy property:\n");
     printf("Press 2 if you want to sell property:\n");
     printf("Enter your response: ");
@@ -166,11 +170,13 @@ int main()
                     }
                 }
             }
-            else if (buy_choice == 0){
+            else if (buy_choice == 0)
+            {
                 printf("Sorry!!!\n");
                 printf("Better luck next time\n");
             }
-            else{
+            else
+            {
                 printf("Enter valid input!!!");
             }
         }
@@ -191,7 +197,7 @@ int main()
     {
         printf("Enter valid input!!!");
     }
-    mysql_close(conn);
+    mysql_close(conn);//Closing the connection with mysql server.
 
     return 0;
 }

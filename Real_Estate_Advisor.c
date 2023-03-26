@@ -92,15 +92,15 @@ int search(MYSQL *conn, int area, int price)
         {
             printf("%s %s %s %s %s %s\n", row[0], row[1], row[2], row[3], row[4], row[5]);
         }
+        return 1;
     }
     else
     {
         printf("Sorry !!!");
         printf("We do not have any property according to your choice.\n");
         printf("Better luck next time!!!\n");
-        
+        return 0;
     }
-    return 0;
     mysql_free_result(res);
 }
 int main()
@@ -121,7 +121,7 @@ int main()
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
-    int var, id, price, area, loan_var;
+    int var, id, price, area, loan_var, buy_choice;
     printf("Press 1 if you want to buy property:\n");
     printf("Press 2 if you want to sell property:\n");
     printf("Enter your response: ");
@@ -133,41 +133,58 @@ int main()
         scanf("%d", &area);
         printf("Enter the estimated price of your property: ");
         scanf("%d", &price);
-        search(conn, area, price);
-        printf("Enter the id of the property you want to buy: ");
-        scanf("%d", &id);
-        if (!(delete (conn, id)))
+        if (search(conn, area, price))
         {
-            printf("The selected property has been assigned to you!!!");
-            printf("Press 1 if you want to take loan.\n");
-            printf("Press 0 if you do not want to take loan\n");
+            printf("Do you want to buy any of the listed properties?\n");
+            printf("Press 1 if yes.\n");
+            printf("Press 2 if no.\n");
             printf("Enter your response: ");
-            scanf("%d", &loan_var);
-            if (loan_var == 1)
+            scanf("%d", &buy_choice);
+            if (buy_choice == 1)
             {
-                loan(conn);
+                printf("Enter the id of the property you want to buy: ");
+                scanf("%d", &id);
+                if (!(delete (conn, id)))
+                {
+                    printf("The selected property has been assigned to you!!!\n");
+                    printf("Press 1 if you want to take loan.\n");
+                    printf("Press 0 if you do not want to take loan\n");
+                    printf("Enter your response: ");
+                    scanf("%d", &loan_var);
+                    if (loan_var == 1)
+                    {
+                        loan(conn);
+                    }
+                    else if (loan_var == 0)
+                    {
+                        printf("We are happy to hear that you are capable of buying your property on your own.\n");
+                        printf("You can contact us whenever you want any assistance related to property.!!!\n");
+                    }
+                    else
+                    {
+                        printf("Enter valid input!!!\n");
+                    }
+                }
             }
-            else if (loan_var == 0)
-            {
-                printf("We are happy to hear that you are capable of buying your property on your own.\n");
-                printf("You can contact us whenever you want any assistance related to property.!!!");
+            else if (buy_choice == 0){
+                printf("Sorry!!!\n");
+                printf("Better luck next time\n");
             }
-            else
-            {
+            else{
                 printf("Enter valid input!!!");
             }
         }
     }
     else if (var == 2)
     {
-        printf("Enter the required details of your property: ");
+        printf("Enter the required details of your property:\n");
         if (insert(conn))
         {
             fprintf(stderr, "%s\n", mysql_error(conn));
         }
         else
         {
-            printf("Your property is successfully added to the database.");
+            printf("Your property is successfully added to the database.\n");
         }
     }
     else

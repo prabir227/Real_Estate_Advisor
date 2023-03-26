@@ -191,19 +191,6 @@ int main()
     {
         printf("Enter valid input!!!");
     }
-    // if (mysql_query(conn, "SELECT * FROM property")) {
-    //     fprintf(stderr, "%s\n", mysql_error(conn));
-    //     exit(1);
-    // }
-
-    // res = mysql_use_result(conn);
-    // loan(conn);
-    // delete(conn, 1);
-    //  while ((row = mysql_fetch_row(res)) != NULL) {
-    //      printf("%s %s %s %s %s %s\n", row[0], row[1], row[2], row[3], row[4], row[5]);
-    //  }
-    // search(conn,24000,3000000);
-    //  mysql_free_result(res);
     mysql_close(conn);
 
     return 0;
